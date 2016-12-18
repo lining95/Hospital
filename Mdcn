@@ -1,0 +1,119 @@
+import java.sql.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.*;
+
+public class Mdcn extends JFrame implements ActionListener {
+      /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	Connection con;
+      Statement sql;
+      JButton b1,b2,b3;
+      JTextField tf1,tf2,tf3,tf4;
+      JTextArea ta1,ta2;
+      Box basebox,bv1,bv2,bv3,bv4;
+      JScrollPane sp1,sp2;
+	Mdcn(){
+		setLayout(new BorderLayout());
+		JPanel p1=new JPanel();
+		JPanel p2=new JPanel();
+		b1=new JButton("查询最新医生开药信息");
+		b2=new JButton("查询药品支付情况");
+		b3=new JButton("更新药库信息");
+		b1.addActionListener(this);
+		b2.addActionListener(this);
+		p1.add(b1);
+		p1.add(Box.createHorizontalStrut(140));
+		p1.add(b2);
+		p1.add(Box.createHorizontalStrut(200));
+		p1.add(b3);
+	    ta1=new JTextArea();
+	    ta2=new JTextArea();
+	    ta1.setEditable(false);
+	    ta1.setColumns(30);
+	    ta1.setRows(20);
+	    ta1.setBounds(30, 10, 10, 10);
+	    ta2.setEditable(false);
+	    ta2.setColumns(30);
+	    ta2.setRows(20);
+	    ta2.setBounds(30, 10, 10, 10);
+	    sp1=new JScrollPane();
+	    sp2=new JScrollPane();
+	    sp1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+	    sp1.setViewportView(ta1);
+	    sp2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+	    sp2.setViewportView(ta2);
+	    bv1=Box.createVerticalBox();
+	    bv1.add(sp1);
+	    bv2=Box.createVerticalBox();
+	    bv2.add(sp2);
+	    tf1=new JTextField(16);
+	   // tf1.setBounds(10, 10, 16, 10);
+	    tf2=new JTextField(16);
+	    tf3=new JTextField(16);
+	    tf4=new JTextField(16);
+	    bv3=Box.createVerticalBox();
+	    bv3.add(new JLabel("药品号"));
+	    bv3.add(Box.createVerticalStrut(80));
+	    bv3.add(new JLabel("药品名"));
+	    bv3.add(Box.createVerticalStrut(80));
+	    bv3.add(new JLabel("药品数量"));
+	    bv3.add(Box.createVerticalStrut(80));
+	    bv3.add(new JLabel("药品价格"));
+	    bv3.add(Box.createVerticalStrut(80));
+	    
+	    bv4=Box.createVerticalBox();
+	    bv4.add(tf1);
+	    bv4.add(Box.createVerticalStrut(8));
+	    bv4.add(tf2);
+	    bv4.add(Box.createVerticalStrut(8));
+	    bv4.add(tf3);
+	    bv4.add(Box.createVerticalStrut(8));
+	    bv4.add(tf4);
+	    bv4.add(Box.createVerticalStrut(8));
+	    
+	    basebox=Box.createHorizontalBox();
+	    basebox.add(bv1);
+	    basebox.add(Box.createHorizontalStrut(10));
+	    basebox.add(bv2);
+	    basebox.add(Box.createHorizontalStrut(10));
+	    basebox.add(bv3);
+	    basebox.add(Box.createHorizontalStrut(4));
+	    basebox.add(bv4);
+	    p2.add(basebox);
+	    add(p1,"North");
+	    add(p2,"Center");
+	    setSize(1000,600);
+	    setBackground(Color.pink);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+Mdcn md=new Mdcn();
+md.setVisible(true);
+		
+		
+	}
+
+
+
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
