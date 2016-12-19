@@ -12,13 +12,65 @@ public class Mdcn extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	Connection con;
       Statement sql;
-      JButton b1,b2,b3;
-      JTextField tf1,tf2,tf3,tf4;
+      JMenuBar bar=null;
+      JMenu menu1,menu2;
+      JMenuItem item1,item2;
+      JButton b1,b2,b3, b4,b5;
+      JTextField tf1,tf2,tf3,tf4, tf5,tf6;
       JTextArea ta1,ta2;
-      Box basebox,bv1,bv2,bv3,bv4;
+      Box basebox,bv1,bv2,bv3,bv4, bv5,bv6,basebox1;
       JScrollPane sp1,sp2;
 	Mdcn(){
 		setLayout(new BorderLayout());
+		bar=new JMenuBar();
+		menu1=new JMenu("登录");
+		menu2=new JMenu("药房");
+//		item1=new JMenuItem("登录");
+//		item2=new JMenuItem("药房");
+//		menu1.add(item1);
+//		menu2.add(item2);
+		bar.add(menu1);
+		bar.add(menu2);
+		//menu1.isVisible();
+		//menu2.isEnabled();
+//		item1.addActionListener(this);
+//		item2.addActionListener(this);
+		JPanel p3=new JPanel();
+		JPanel p4=new JPanel();
+	    bv5=Box.createVerticalBox();
+	    bv5.add(Box.createVerticalStrut(20));
+	    bv5.add(new JLabel("用户名"));
+	    bv5.add(Box.createVerticalStrut(40));
+	    bv5.add(new JLabel("密码"));
+	    bv5.add(Box.createVerticalStrut(40));
+	    tf5=new JTextField(16);
+	    tf6=new JTextField(16);
+	    bv6=Box.createVerticalBox();
+	    bv6.add(Box.createVerticalStrut(20));
+	    bv6.add(tf5);
+	    bv6.add(Box.createVerticalStrut(40));
+	    bv6.add(tf6);
+	    bv6.add(Box.createVerticalStrut(40));
+	    basebox1=Box.createHorizontalBox();
+	    basebox1.add(bv5);
+	    basebox1.add(Box.createHorizontalStrut(10));
+	    basebox1.add(bv6);
+	   // menu1.add(basebox1);
+	    p3.add(basebox1);
+	    b4=new JButton("登录");
+	    b5=new JButton("重置");
+	    b4.addActionListener(this);
+	    b5.addActionListener(this);
+		p4.add(b4);
+		p4.add(Box.createHorizontalStrut(30));
+		p4.add(b5);
+	    menu1.add(p3);
+	    menu1.add(p4);
+	    
+	    
+	    
+		
+	//药房Menu2	
 		JPanel p1=new JPanel();
 		JPanel p2=new JPanel();
 		b1=new JButton("查询最新医生开药信息");
@@ -85,8 +137,9 @@ public class Mdcn extends JFrame implements ActionListener {
 	    basebox.add(Box.createHorizontalStrut(4));
 	    basebox.add(bv4);
 	    p2.add(basebox);
-	    add(p1,"North");
-	    add(p2,"Center");
+	    menu2.add(p1);
+	    menu2.add(p2);
+	    setJMenuBar(bar);
 	    setSize(1000,600);
 	    setBackground(Color.pink);
 	}
@@ -96,9 +149,6 @@ public class Mdcn extends JFrame implements ActionListener {
 	
 	
 	
-	
-	
-
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 Mdcn md=new Mdcn();
@@ -111,9 +161,20 @@ md.setVisible(true);
 
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+//		if(e.getSource()==item1){
+//			this.getContentPane().removeAll();
+//			this.getContentPane().add(menu1);
+//			this.getContentPane().repaint();
+//			this.getContentPane().validate();
+//		}
+//		if(e.getSource()==item2){
+//			this.getContentPane().removeAll();
+//			this.getContentPane().add(menu2);
+//			this.getContentPane().repaint();
+//			this.getContentPane().validate();		
+//		}
 	}
 
 }
