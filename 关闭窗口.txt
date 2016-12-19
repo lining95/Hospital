@@ -1,0 +1,32 @@
+import java.awt.*;
+import java.awt.event.*;
+
+public class TestDemo2
+{
+ 
+ public static void main(String[] args) {
+  Button btn;
+   final Frame f1=new Frame("TestDemo2");
+   f1.setVisible(true);
+   f1.addWindowListener(new WindowAdapter(){
+
+  @Override
+  public void windowClosing(WindowEvent e) {
+   f1.dispose();
+  }
+
+   });
+   
+   btn=new Button("¹Ø±Õ");
+   btn.addActionListener(new ActionListener(){
+
+  @Override
+  public void actionPerformed(ActionEvent e) {
+   // TODO Auto-generated method stub
+   f1.dispose();
+  }
+    
+   });
+   f1.add(btn);
+ }
+}
