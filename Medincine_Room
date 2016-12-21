@@ -6,31 +6,31 @@ public class MedincineRoom {
 	public static void main(String[] args) {
 Vector ban = new Vector();
 
- Medicine m1=new Medicine("ÌìÉñ¾Æ",99,100,0);
+ Medicine m1=new Medicine("å¤©ç¥é…’",99,100,0);
 ban.add(m1);
-Medicine m2=new Medicine("°åÀ¶¸ù",9,100,0);
+Medicine m2=new Medicine("æ¿è“æ ¹",9,100,0);
 ban.add(m2);
-//	medicine[0].setMdname("ÌìÉñ¾Æ");
+//	medicine[0].setMdname("å¤©ç¥é…’");
 //	medicine[0].setPrice(99);
 //	medicine[0].setStore(100);
 //	medicine[0].setProfit(0);
-//	medicine[1].setMdname("°åÀ¶¸ù");
+//	medicine[1].setMdname("æ¿è“æ ¹");
 //	medicine[1].setPrice(9);
 //	medicine[1].setStore(100);
 //	medicine[1].setProfit(0);
-//	medicine[2].setMdname("¸ĞÃ°Áé");
+//	medicine[2].setMdname("æ„Ÿå†’çµ");
 //	medicine[2].setPrice(10);
 //	medicine[2].setStore(100);
 //	medicine[2].setProfit(0);
-//	medicine[3].setMdname("ÍËÉÕÒ©");
+//	medicine[3].setMdname("é€€çƒ§è¯");
 //	medicine[3].setPrice(16);
 //	medicine[3].setStore(100);
 //	medicine[3].setProfit(0);
-//	medicine[4].setMdname("Ö¹Í´Ò©");
+//	medicine[4].setMdname("æ­¢ç—›è¯");
 //	medicine[4].setPrice(15);
 //	medicine[4].setStore(100);
 //	medicine[4].setProfit(0);
-//	medicine[5].setMdname("ĞºÁ¡Í£");
+//	medicine[5].setMdname("æ³»ç—¢åœ");
 //	medicine[5].setPrice(6);
 //	medicine[5].setStore(100);
 //	medicine[5].setProfit(0);
@@ -82,10 +82,10 @@ m2.display();
 			// TODO Auto-generated method stub
          store-=num;
          profit+=num*price;
-         System.out.println("Ò©Æ·Ãû³Æ£º"+getMdname()+"\tÒÑÊÛÊıÁ¿"+num+"\t¸ÃÒ©Æ·×ÜÀûÈó"+getProfit());
+         System.out.println("è¯å“åç§°ï¼š"+getMdname()+"\tå·²å”®æ•°é‡"+num+"\tè¯¥è¯å“æ€»åˆ©æ¶¦"+getProfit());
 		}		
 		public void display(){
-			System.out.println("Ò©Æ·Ãû³Æ£º"+getMdname()+"\t¼Û¸ñ"+getPrice()+"\t¿â´æ"+getStore());
+			System.out.println("è¯å“åç§°ï¼š"+getMdname()+"\tä»·æ ¼"+getPrice()+"\tåº“å­˜"+getStore());
 		}
 		public void show(){
 			
