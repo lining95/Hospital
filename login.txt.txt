@@ -1,0 +1,70 @@
+public Login() {
+		// 登陆界面配置
+		l1.setBounds(110, 50, 150, 20);
+		l2.setBounds(50, 90, 50, 20);
+		l3.setBounds(50, 120, 50, 20);
+		l4.setBounds(120, 200, 150, 20);
+		t1.setBounds(120, 90, 150, 20);
+		t2.setBounds(120, 120, 150, 20);
+		b1.setBounds(125, 160, 50, 20);
+		b1.addActionListener(this);
+		b2.setBounds(210, 160, 50, 20);
+		b2.addActionListener(this);
+		frmD.add(l1);
+		frmD.add(l2);
+		frmD.add(l3);
+		frmD.add(t1);
+		frmD.add(t2);
+		frmD.add(b1);
+		frmD.add(b2);
+		frmD.setLayout(null);
+		frmD.setBounds(500, 200, 350, 230);
+		frmD.setBackground(Color.ORANGE);
+		frmD.setVisible(true);
+		t2.setEchoChar('*');
+
+		// 实现窗口关闭按扭的事件
+		frmD.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			}
+		});
+		frmD.setResizable(false);// 固定窗口的大小
+
+		try {
+			stmt = JdbcUtil.getConnection().createStatement();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		Object soruce = e.getSource();
+
+		if (soruce == b1) {
+
+			if (soruce == b1) {
+				String name = t1.getText();
+				String pass = t2.getText();
+				if (!"".equals(name.trim()) && !"".equals(pass.trim())) {
+					if ("123".equals(name.trim()) && "123".equals(pass.trim())) {
+						new MainFunction();
+						frmD.dispose();
+					} else {
+						JOptionPane.showMessageDialog(null, "用户名或密码错误，请重新输入！",
+								"系统提示", JOptionPane.ERROR_MESSAGE);
+					}
+				}else {
+					JOptionPane.showMessageDialog(null, "请输入完整登陆信息！",
+							"系统提示", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		}
+
+		if (soruce == b2) {
+			System.exit(0);
+		}
+	}
+
+}
