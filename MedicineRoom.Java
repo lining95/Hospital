@@ -15,12 +15,12 @@ public class Mdcn extends JFrame implements ActionListener {
       JMenuBar bar=null;
       JMenu menu1,menu2;
       JMenuItem item1,item2;
-      JButton b1,b2,b3, b4,b5;
+      JButton b1,b2,b3, b4,b5, b6,b7,b8,b9,b10;
       JTextField tf1,tf2,tf3,tf4, tf5;
       JPasswordField tf6;
-      JTextArea ta1,ta2;
-      Box basebox,bv1,bv2,bv3,bv4, bv5,bv6,basebox1;
-      JScrollPane sp1,sp2;
+      JTextArea ta1,ta2,ta3;
+      Box basebox,bv1,bv2,bv3,bv4, bv5,bv6,basebox1, bv7;
+      JScrollPane sp1,sp2,sp3;
 	@SuppressWarnings({ "deprecation" })
 	Mdcn(){
 		setLayout(new BorderLayout());
@@ -79,39 +79,77 @@ public class Mdcn extends JFrame implements ActionListener {
 	//药房Menu2	
 		JPanel p1=new JPanel();
 		JPanel p2=new JPanel();
+		JPanel p5=new JPanel();
+	
 		b1=new JButton("查询最新医生开药信息");
 		b2=new JButton("查询药品支付情况");
 		b3=new JButton("更新药库信息");
+		b6=new JButton("清空列表");
+		b7=new JButton("清空列表");
+		b8=new JButton("清空列表");
+		b9=new JButton("查询药库信息");
+		b10=new JButton("清空列表");
+		
 		b1.addActionListener(this);
 		b2.addActionListener(this);
 		b3.addActionListener(this);
+		b6.addActionListener(this);
+		b7.addActionListener(this);
+		b8.addActionListener(this);
+		b9.addActionListener(this);
+		b10.addActionListener(this);
+		
+		p1.add(Box.createHorizontalStrut(20));
 		p1.add(b1);
-		p1.add(Box.createHorizontalStrut(140));
+		p1.add(Box.createHorizontalStrut(70));
 		p1.add(b2);
-		p1.add(Box.createHorizontalStrut(200));
+		p1.add(Box.createHorizontalStrut(100));
+		p1.add(b9);
+		p1.add(Box.createHorizontalStrut(100));
 		p1.add(b3);
+		p1.add(Box.createHorizontalStrut(30));
+		p5.add(b6);
+		p5.add(Box.createHorizontalStrut(150));
+		p5.add(b7);
+		p5.add(Box.createHorizontalStrut(150));
+		p5.add(b8);
+		p5.add(Box.createHorizontalStrut(150));
+		p5.add(b10);
+		
 	    ta1=new JTextArea();
 	    ta2=new JTextArea();
+	    ta3=new JTextArea();
 	    ta1.setEditable(false);
-	    ta1.setColumns(30);
+	    ta1.setColumns(20);
 	    ta1.setRows(20);
 	    ta1.setBounds(30, 10, 10, 10);
 	    ta1.setLineWrap(true);
 	    ta2.setEditable(false);
-	    ta2.setColumns(30);
+	    ta2.setColumns(20);
 	    ta2.setRows(20);
 	    ta2.setBounds(30, 10, 10, 10);
 	    ta2.setLineWrap(true);
+	    ta3.setEditable(false);
+	    ta3.setColumns(20);
+	    ta3.setRows(20);
+	    ta3.setBounds(30, 10, 10, 10);
+	    ta3.setLineWrap(true);
+	    
 	    sp1=new JScrollPane();
 	    sp2=new JScrollPane();
+	    sp3=new JScrollPane();
 	    sp1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 	    sp1.setViewportView(ta1);
 	    sp2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 	    sp2.setViewportView(ta2);
+	    sp3.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+	    sp3.setViewportView(ta3);
 	    bv1=Box.createVerticalBox();
 	    bv1.add(sp1);
 	    bv2=Box.createVerticalBox();
 	    bv2.add(sp2);
+	    bv7=Box.createVerticalBox();
+	    bv7.add(sp3);
 	    tf1=new JTextField(16);
 	   // tf1.setBounds(10, 10, 16, 10);
 	    tf2=new JTextField(16);
@@ -142,14 +180,17 @@ public class Mdcn extends JFrame implements ActionListener {
 	    basebox.add(Box.createHorizontalStrut(10));
 	    basebox.add(bv2);
 	    basebox.add(Box.createHorizontalStrut(10));
+	    basebox.add(bv7);
+	    basebox.add(Box.createHorizontalStrut(10));
 	    basebox.add(bv3);
 	    basebox.add(Box.createHorizontalStrut(4));
 	    basebox.add(bv4);
 	    p2.add(basebox);
 	    menu2.add(p1);
 	    menu2.add(p2);
+	    menu2.add(p5);
 	    setJMenuBar(bar);
-	    setSize(1000,600);
+	    setSize(1100,700);
 	    setBackground(Color.pink);
 	    
 	    menu2.disable();
@@ -229,7 +270,7 @@ md.setVisible(true);
 			    MedID=rs.getString("MedID");
 			    MedNum=rs.getString("MedNum");
 			    price=rs.getString("price");
-			    ta1.append("药品收费单号:"+MedItemID+"\r\n"+"药品号:"+MedID+"\r\n"+"药品数量:"+MedNum+"\r\n"+"价格:"+price+"\r\n\r\n");
+			    ta1.append("药品收费单号:"+MedItemID+"\r\n"+"药品号:"+MedID+"\r\n"+"药品数量:"+MedNum+"\r\n"+"单价:"+price+"\r\n\r\n");
 			       
 				}
 				
@@ -238,7 +279,49 @@ md.setVisible(true);
 				e1.printStackTrace();
 			}
 		}
-		
+		if(e.getSource()==b6){
+			ta1.setText("");
+		}
+		if(e.getSource()==b7){
+			ta2.setText("");
+		}
+		if(e.getSource()==b8){
+			ta3.setText("");
+		}
+		if(e.getSource()==b2){
+			String RegID,MedItemID,sumprice,chargeState;
+			String sql3="select * from charge order by RegID desc";
+			ResultSet rs=SQLOperate.SqlSel(sql3);
+			try {
+				while(rs.next()){
+					RegID=rs.getString("RegID");
+					MedItemID=rs.getString("MedItemID");
+					sumprice=rs.getString("sumprice");
+					chargeState=rs.getString("chargeState");
+					ta2.append("预约序号:"+RegID+"\r\n"+"药品收费单号:"+MedItemID+"\r\n"+"药品总价:"+sumprice+"\r\n"+"支付状态:"+chargeState+"\r\n\r\n");
+				}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		if(e.getSource()==b9){
+			String MedID,MedName,MedNum,price;
+			String sql4="select * from Medicine order by MedID asc";
+			ResultSet rs=SQLOperate.SqlSel(sql4);
+			try {
+				while(rs.next()){
+					MedID=rs.getString("MedID");
+					MedName=rs.getString("MedName");
+					MedNum=rs.getString("MedNum");
+					price=rs.getString("price");
+					ta3.append("药品号:"+MedID+"\r\n"+"药品名称:"+MedName+"\r\n"+"药品数量:"+MedNum+"\r\n"+"单价:"+price+"\r\n\r\n");
+				}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 		
 	}
 
