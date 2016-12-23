@@ -2,6 +2,7 @@ package admin;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
@@ -14,93 +15,147 @@ import java.sql.Statement;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.JTableHeader;
 
 public class main{
-static JFrame frame = new JFrame("管理员客户端");
 
 public static void main(String[] args) {
+	//创建新的窗口
+	final JFrame frame1 = new JFrame("管理员登录");
+	frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	frame1.setLayout(null);
+	//设置在屏幕的位置
+	// 窗体大小
+	frame1.setSize(500,300);
+	frame1.setLocation(500, 100);
+	// 显示窗体
+	frame1.setVisible(true);	
+	
+	final JTextField  text1=new JTextField(10);
+	final JTextField  text2=new JTextField(10);
+	JLabel la=new JLabel("ID:");
+	JLabel la2=new JLabel("密码:");
+	JButton jbn=new JButton("登录");
+    frame1.add(la);
+    la.setBounds(170,50,50,20);
+    frame1.add(text1);
+    text1.setBounds(200,50,100,20);
+    frame1.add(la2);
+    la2.setBounds(170,90,50,20);
+    frame1.add(text2);
+    text2.setBounds(200,90,100,20);
+    frame1.add(jbn);
+    jbn.setBounds(200,140,100,30);
+    
 
-	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	frame.setLayout(null);
-		
-//窗体大小
-frame.setSize(500,300);
-frame.setLocation(500, 100);
-//按钮1
-JButton button1 =new JButton("1.管理医院科室信息");
-//在窗体上添加按钮
-frame.add(button1);
-button1.setBounds(145,50,200,30);
-//显示窗体
-frame.setVisible(true);
-//添加点击事件监听器（你可以使用任何其他监听，看你想在什么情况下创建新的窗口了）
-button1.addActionListener(new ActionListener(){
-//单击按钮执行的方法
-public void actionPerformed(ActionEvent e) {
-closeThis();
-adminmenu1();
-}
-});
+        
 
-
-//按钮2
-JButton button2 =new JButton("2.管理药品信息");
-//在窗体上添加按钮
-frame.add(button2);
-button2.setBounds(145,80,200,30);
-//显示窗体
-frame.setVisible(true);
-//添加点击事件监听器（你可以使用任何其他监听，看你想在什么情况下创建新的窗口了）
-button2.addActionListener(new ActionListener(){
-//单击按钮执行的方法
-public void actionPerformed(ActionEvent e) {
-closeThis();
-adminmenu2();
-}
-});
-
-//按钮3
-JButton button3 =new JButton("3.管理收费信息");
-//在窗体上添加按钮
-frame.add(button3);
-button3.setBounds(145,110,200,30);
-//显示窗体
-frame.setVisible(true);
-//添加点击事件监听器（你可以使用任何其他监听，看你想在什么情况下创建新的窗口了）
-button3.addActionListener(new ActionListener(){
-//单击按钮执行的方法
-public void actionPerformed(ActionEvent e) {
-closeThis();
-adminmenu3();
-}
-});
-
-//按钮4
-JButton button4 =new JButton("4.管理账号信息");
-//在窗体上添加按钮
-frame.add(button4);
-button4.setBounds(145,140,200,30);
-//显示窗体
-frame.setVisible(true);
-//添加点击事件监听器（你可以使用任何其他监听，看你想在什么情况下创建新的窗口了）
-button4.addActionListener(new ActionListener(){
-//单击按钮执行的方法
-public void actionPerformed(ActionEvent e) {
-closeThis();
-adminmenu4();
-}
-});
+    
+	
+  //添加点击事件监听器（你可以使用任何其他监听，看你想在什么情况下创建新的窗口了）
+    jbn.addActionListener(new ActionListener(){
+    //单击按钮执行的方法
+    public void actionPerformed(ActionEvent e) {
+    	
+  
+    	
+    	
+		Statement st=null;
+		Connection con=null;
+    	
+    	try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	
+    	try {
+			con=DriverManager.getConnection("jdbc:sqlserver://localhost:1433; DatabaseName=Hospital","sa","sa");
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	
+    	try {
+			st=con.createStatement();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+   	
+	       String  m1=null;
+	       m1=text1.getText(); 
+	       int i1 =0;
+	       i1 = Integer.parseInt(m1);
+	       String s= null;   
+	       s= text2.getText();  
+   
+		     String sql="select * from Users where userID="+i1+"";
+			ResultSet rs=null;	
+			try {
+				rs=st.executeQuery(sql);
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			   
+			int i=0;
+			String password=null;
+			
+			try {
+				while(rs.next())
+				{i=rs.getInt("roleID");
+				password=rs.getString("pwd");}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+					
+			if(i==1)
+			{if(s.equals(password))				
+	          {	frame1.dispose();
+	          adminmenu66();
+		}		
+		    else 
+		    	{	frame1.dispose();main(null);adminmenu0();}
+			}
+		    else 
+		    	{  frame1.dispose(); main(null);adminmenu0();}
+			
+			
+    } 
+    });
+	
 
 }
     
- 
+    public static void adminmenu0(){
+		//创建新的窗口
+		JFrame frame= new JFrame("错误提示");
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setLayout(null);
+		//设置在屏幕的位置
+		// 窗体大小
+		frame.setSize(300,100);
+		frame.setLocation(600, 200);
+		// 显示窗体
+		frame.setVisible(true);	
+		
+		
+		JLabel la2=new JLabel("ID或密码错误！");	
+        frame.add(la2);
+        la2.setBounds(100,20,200,20);	
+    	
+    }
+
 	public static void adminmenu1(){
 	//创建新的窗口
-	JFrame frame = new JFrame("管理医院科室信息");
+	final JFrame frame = new JFrame("管理医院科室信息");
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	frame.setLayout(null);
 	//设置在屏幕的位置
@@ -122,9 +177,11 @@ adminmenu4();
 	button1.addActionListener(new  ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-	    closeThis();
+			frame.dispose();
 	adminmenu11();
 	}
+
+
 	});
 	
 	//按钮2
@@ -138,7 +195,7 @@ adminmenu4();
 	button2.addActionListener(new ActionListener(){
 	//单击按钮执行的方法
 	public void actionPerformed(ActionEvent e) {
-   closeThis();
+		frame.dispose();
 	adminmenu12();
 	}
 	});
@@ -156,7 +213,7 @@ adminmenu4();
 	button3.addActionListener(new ActionListener(){
 	//单击按钮执行的方法
 	public void actionPerformed(ActionEvent e) {
-	closeThis();
+		frame.dispose();
 	adminmenu13();
 	}
 	});
@@ -174,7 +231,7 @@ adminmenu4();
 	button5.addActionListener(new ActionListener(){
 	//单击按钮执行的方法
 	public void actionPerformed(ActionEvent e) {
-	closeThis();
+		frame.dispose();
 	adminmenu14();
 	}
 	});
@@ -194,10 +251,12 @@ adminmenu4();
 	button4.addActionListener(new ActionListener(){
 	//单击按钮执行的方法
 	public void actionPerformed(ActionEvent e) {
-	closeThis();
+		frame.dispose();
 	//创建新的窗口
-   main(null);
+	adminmenu66();
 	}
+
+
 	});
 	
 	
@@ -206,7 +265,7 @@ adminmenu4();
 
 	public static void adminmenu2(){
 		//创建新的窗口
-		JFrame frame = new JFrame("管理药品信息");
+		final JFrame frame = new JFrame("管理药品信息");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
 		//设置在屏幕的位置
@@ -227,7 +286,7 @@ adminmenu4();
 		button1.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		 adminmenu21();
 		}
 		});
@@ -243,7 +302,7 @@ adminmenu4();
 		button2.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		 adminmenu22();
 		}
 		});
@@ -261,7 +320,7 @@ adminmenu4();
 		button3.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		 adminmenu23();
 		}
 		});
@@ -277,7 +336,7 @@ adminmenu4();
 		button5.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		adminmenu24();
 		}
 		});
@@ -294,9 +353,9 @@ adminmenu4();
 		button4.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		//创建新的窗口
-	   main(null);
+			adminmenu66();
 		}
 		});
 		
@@ -305,7 +364,7 @@ adminmenu4();
 	
 	public static void adminmenu3(){
 		//创建新的窗口
-		JFrame frame = new JFrame("管理收费信息");
+		final JFrame frame = new JFrame("管理收费信息");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
 		//设置在屏幕的位置
@@ -316,7 +375,7 @@ adminmenu4();
 		frame.setVisible(true);	
 		
 		//按钮1
-		JButton button1 =new JButton("1.增加药品信息");
+		JButton button1 =new JButton("1.管理药品单信息");
 		//在窗体上添加按钮
 		frame.add(button1);
 		button1.setBounds(145,50,200,30);
@@ -326,20 +385,14 @@ adminmenu4();
 		button1.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		//创建新的窗口
-		JFrame frame = new JFrame("新窗口");
-		//设置在屏幕的位置
-		frame.setLocation(100,50);
-		//窗体大小
-		frame.setSize(200,200);
-		//显示窗体
-		frame.setVisible(true);
+		adminmenu31();
 		}
 		});
 		
 		//按钮2
-		JButton button2 =new JButton("2.删除药品信息");
+		JButton button2 =new JButton("2.管理诊费信息");
 		//在窗体上添加按钮
 		frame.add(button2);
 		button2.setBounds(145,80,200,30);
@@ -349,22 +402,16 @@ adminmenu4();
 		button2.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		//创建新的窗口
-		JFrame frame = new JFrame("新窗口");
-		//设置在屏幕的位置
-		frame.setLocation(100,50);
-		//窗体大小
-		frame.setSize(200,200);
-		//显示窗体
-		frame.setVisible(true);
+			adminmenu32();
 		}
 		});
 		
 		
 		
 		//按钮3
-		JButton button3 =new JButton("3.更改药品信息");
+		JButton button3 =new JButton("3.返回");
 		//在窗体上添加按钮
 		frame.add(button3);
 		button3.setBounds(145,110,200,30);
@@ -374,43 +421,17 @@ adminmenu4();
 		button3.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		//创建新的窗口
-		JFrame frame = new JFrame("新窗口");
-		//设置在屏幕的位置
-		frame.setLocation(100,50);
-		//窗体大小
-		frame.setSize(200,200);
-		//显示窗体
-		frame.setVisible(true);
+		adminmenu66();
 		}
 		});
-		
-		
-		//按钮4
-		JButton button4 =new JButton("4.返回");
-		//在窗体上添加按钮
-		frame.add(button4);
-		button4.setBounds(145,140,200,30);
-		//显示窗体
-		frame.setVisible(true);
-		//添加点击事件监听器（你可以使用任何其他监听，看你想在什么情况下创建新的窗口了）
-		button4.addActionListener(new ActionListener(){
-		//单击按钮执行的方法
-		public void actionPerformed(ActionEvent e) {
-		closeThis();
-		//创建新的窗口
-	   main(null);
-		}
-		});
-		
-		
-		
+				
 	}
 
 	public static void adminmenu4(){
 		//创建新的窗口
-		JFrame frame = new JFrame("管理账号信息");
+		final JFrame frame = new JFrame("管理账号信息");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
 		//设置在屏幕的位置
@@ -431,7 +452,7 @@ adminmenu4();
 		button1.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		adminmenu41();
 		}
 		});
@@ -447,7 +468,7 @@ adminmenu4();
 		button2.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		adminmenu42();
 		}
 		});
@@ -465,7 +486,7 @@ adminmenu4();
 		button3.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		adminmenu43();
 		}
 		});
@@ -482,7 +503,7 @@ adminmenu4();
 		button5.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		adminmenu44();
 		}
 		});
@@ -499,9 +520,9 @@ adminmenu4();
 		button4.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		//创建新的窗口
-	   main(null);
+		adminmenu66();
 		}
 		});
 		
@@ -513,7 +534,7 @@ adminmenu4();
 	
 	public static void adminmenu11(){
 		//创建新的窗口
-		JFrame frame = new JFrame("增加医院科室信息");
+		final JFrame frame = new JFrame("增加医院科室信息");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setLayout(null);
 		//设置在屏幕的位置
@@ -523,8 +544,8 @@ adminmenu4();
 		// 显示窗体
 		frame.setVisible(true);	
 		
-		final JTextField  text1=new JTextField(15);
-		final JTextField  text2=new JTextField(15);
+		final JTextField  text1=new JTextField(10);
+		final JTextField  text2=new JTextField(10);
 		JLabel la=new JLabel("ID:");
 		JLabel la2=new JLabel("名称:");
 		JButton jbn=new JButton("确定");
@@ -568,7 +589,7 @@ adminmenu4();
 		       int i = Integer.parseInt(m);
 		       String s= text2.getText();
 		      
-		       String sql="set IDENTITY_INSERT Department on;insert into Department (DeptID,DeptName ) values("+i+","+s+")";
+		       String sql="set IDENTITY_INSERT Department on;insert into Department (DeptID,DeptName ) values("+i+",'"+s+"')";
 			try {
 				st.executeUpdate(sql);
 			} catch (SQLException e1) {
@@ -576,7 +597,7 @@ adminmenu4();
 				e1.printStackTrace();
 			}
 		
-		closeThis();
+			frame.dispose();
 		adminmenu1();
 		}
 		});
@@ -592,7 +613,7 @@ adminmenu4();
 		button4.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		//创建新的窗口
 		adminmenu1();
 		}
@@ -603,7 +624,7 @@ adminmenu4();
 	
 	public static void adminmenu12(){
 		//创建新的窗口
-		JFrame frame = new JFrame("删除医院科室信息");
+		final JFrame frame = new JFrame("删除医院科室信息");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
 		//设置在屏幕的位置
@@ -660,7 +681,7 @@ adminmenu4();
 				e1.printStackTrace();
 			}
 		
-		closeThis();
+			frame.dispose();
 		adminmenu1();
 		}
 		});
@@ -676,7 +697,7 @@ adminmenu4();
 		button4.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		//创建新的窗口
 		adminmenu1();
 		}
@@ -691,7 +712,7 @@ adminmenu4();
 	
 	public static void adminmenu13(){
 		//创建新的窗口
-		JFrame frame = new JFrame("修改医院科室信息");
+		final JFrame frame = new JFrame("修改医院科室信息");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
 		//设置在屏幕的位置
@@ -701,8 +722,8 @@ adminmenu4();
 		// 显示窗体
 		frame.setVisible(true);	
 		
-		final JTextField  text1=new JTextField(15);
-		final JTextField  text2=new JTextField(15);
+		final JTextField  text1=new JTextField(10);
+		final JTextField  text2=new JTextField(10);
 		JLabel la=new JLabel("原ID:");
 		JLabel la2=new JLabel("新名称:");
 		JButton jbn=new JButton("确定修改");
@@ -745,7 +766,7 @@ adminmenu4();
 		       int i = Integer.parseInt(m);
 		       String s= text2.getText();
 		      
-		       String sql="UPDATE Department SET DeptName="+s+"  WHERE DeptID="+i+"";
+		       String sql="UPDATE Department SET DeptName='"+s+"'  WHERE DeptID="+i+"";
 			try {
 				st.executeUpdate(sql);
 			} catch (SQLException e1) {
@@ -753,7 +774,7 @@ adminmenu4();
 				e1.printStackTrace();
 			}
 		
-		closeThis();
+			frame.dispose();
 		adminmenu1();
 		}
 		});
@@ -769,7 +790,7 @@ adminmenu4();
 		button4.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		//创建新的窗口
 		adminmenu1();
 		}
@@ -782,7 +803,7 @@ adminmenu4();
 	
 	public static void adminmenu14() {
 		//创建新的窗口
-		JFrame frame = new JFrame("查看医院科室信息");
+		final JFrame frame = new JFrame("查看医院科室信息");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
 		//设置在屏幕的位置
@@ -884,7 +905,7 @@ adminmenu4();
 		button4.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		//创建新的窗口
 		adminmenu1();
 		}
@@ -922,7 +943,7 @@ adminmenu4();
 	public static void adminmenu21(){
 		
 		//创建新的窗口
-		JFrame frame = new JFrame("增加药品信息");
+		final JFrame frame = new JFrame("增加药品信息");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
 		//设置在屏幕的位置
@@ -932,10 +953,10 @@ adminmenu4();
 		// 显示窗体
 		frame.setVisible(true);	
 		
-		final JTextField  text1=new JTextField(15);
-		final JTextField  text2=new JTextField(15);
-		final JTextField  text3=new JTextField(15);
-		final JTextField  text4=new JTextField(15);
+		final JTextField  text1=new JTextField(10);
+		final JTextField  text2=new JTextField(25);
+		final JTextField  text3=new JTextField(10);
+		final JTextField  text4=new JTextField(10);
 		JLabel la=new JLabel("ID:");
 		JLabel la2=new JLabel("名称:");
 		JLabel la3=new JLabel("数量:");
@@ -947,22 +968,22 @@ adminmenu4();
         text1.setBounds(200,50,100,20);
         
         frame.add(la2);
-        la2.setBounds(170,90,50,20);
+        la2.setBounds(170,70,50,20);
         frame.add(text2);
-        text2.setBounds(200,90,100,20);
+        text2.setBounds(200,70,100,20);
         
         frame.add(la3);
-        la3.setBounds(170,130,50,20);
+        la3.setBounds(170,90,50,20);
         frame.add(text3);
-        text3.setBounds(200,130,100,20);
+        text3.setBounds(200,90,100,20);
         
         frame.add(la4);
-        la4.setBounds(170,170,50,20);
+        la4.setBounds(170,110,50,20);
         frame.add(text4);
-        text4.setBounds(200,170,100,20);
+        text4.setBounds(200,110,100,20);
               
         frame.add(jbn);
-        jbn.setBounds(200,220,100,30);
+        jbn.setBounds(200,140,100,30);
 		
 		
         jbn.addActionListener(new ActionListener(){
@@ -996,14 +1017,14 @@ adminmenu4();
 		       String m3=text4.getText();
 		       int i3 = Integer.parseInt(m3);
 		      
-		       String sql="insert into Medicine values("+i1+","+s+","+i2+","+i3+")";
+		       String sql="insert into Medicine values("+i1+",'"+s+"',"+i2+","+i3+")";
 			try {
 				st.executeUpdate(sql);
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}	
-		closeThis();
+			frame.dispose();
 		adminmenu2();
 		}
 		});
@@ -1019,9 +1040,9 @@ adminmenu4();
 		button4.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		//创建新的窗口
-		adminmenu1();
+		adminmenu2();
 		}
 		});
 		
@@ -1031,7 +1052,7 @@ adminmenu4();
 	
 	public static void adminmenu22(){
 		//创建新的窗口
-				JFrame frame = new JFrame("删除药品信息");
+				final JFrame frame = new JFrame("删除药品信息");
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setLayout(null);
 				//设置在屏幕的位置
@@ -1088,8 +1109,8 @@ adminmenu4();
 						e1.printStackTrace();
 					}
 				
-				closeThis();
-				adminmenu1();
+					frame.dispose();
+				adminmenu2();
 				}
 				});
 		
@@ -1104,9 +1125,9 @@ adminmenu4();
 				button4.addActionListener(new ActionListener(){
 				//单击按钮执行的方法
 				public void actionPerformed(ActionEvent e) {
-				closeThis();
+					frame.dispose();
 				//创建新的窗口
-				adminmenu1();
+				adminmenu2();
 				}
 				});
 				
@@ -1115,7 +1136,7 @@ adminmenu4();
 	
 	public static void adminmenu23(){
 		//创建新的窗口
-		JFrame frame = new JFrame("修改药品信息");
+		final JFrame frame = new JFrame("修改药品信息");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
 		//设置在屏幕的位置
@@ -1126,10 +1147,10 @@ adminmenu4();
 		frame.setVisible(true);	
 		
 
-		final JTextField  text1=new JTextField(15);
-		final JTextField  text2=new JTextField(15);
-		final JTextField  text3=new JTextField(15);
-		final JTextField  text4=new JTextField(15);
+		final JTextField  text1=new JTextField(10);
+		final JTextField  text2=new JTextField(25);
+		final JTextField  text3=new JTextField(10);
+		final JTextField  text4=new JTextField(10);
 		JLabel la=new JLabel("现ID:");
 		JLabel la2=new JLabel("新名称:");
 		JLabel la3=new JLabel("新数量:");
@@ -1216,8 +1237,8 @@ adminmenu4();
 			}
 			
 			
-		closeThis();
-		adminmenu1();
+				frame.dispose();
+		adminmenu2();
 		}
 		});
 		
@@ -1232,9 +1253,9 @@ adminmenu4();
 		button4.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		//创建新的窗口
-		adminmenu1();
+		adminmenu2();
 		}
 		});
 		
@@ -1246,7 +1267,7 @@ adminmenu4();
 	
 	public static void adminmenu24(){
 		//创建新的窗口
-		JFrame frame = new JFrame("查看药品信息");
+		final JFrame frame = new JFrame("查看药品信息");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
 		//设置在屏幕的位置
@@ -1350,7 +1371,7 @@ adminmenu4();
 		button4.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		//创建新的窗口
 		adminmenu2();
 		}
@@ -1360,11 +1381,42 @@ adminmenu4();
 		
 	}
 	
+	public static void adminmenu31(){
+		//创建新的窗口
+		final JFrame frame = new JFrame("管理药品单信息");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLayout(null);
+		//设置在屏幕的位置
+		// 窗体大小
+		frame.setSize(500,300);
+		frame.setLocation(500, 100);
+		// 显示窗体
+		frame.setVisible(true);	
+		
+	}
+			
+	public static void adminmenu32(){
+		//创建新的窗口
+		final JFrame frame = new JFrame("管理诊费信息");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLayout(null);
+		//设置在屏幕的位置
+		// 窗体大小
+		frame.setSize(500,300);
+		frame.setLocation(500, 100);
+		// 显示窗体
+		frame.setVisible(true);	
+		
+	}
+	
+	
+	
+	
 	
 	public static void adminmenu41(){
 		
 		//创建新的窗口
-		JFrame frame = new JFrame("新建账号");
+		final JFrame frame = new JFrame("新建账号");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
 		//设置在屏幕的位置
@@ -1375,8 +1427,8 @@ adminmenu4();
 		frame.setVisible(true);	
 		
 
-		final JTextField  text2=new JTextField(15);
-		final JTextField  text3=new JTextField(15);
+		final JTextField  text2=new JTextField(10);
+		final JTextField  text3=new JTextField(10);
 		JLabel la2=new JLabel("职业ID:");
 		JLabel la3=new JLabel("密码:");
 		JButton jbn=new JButton("确定");
@@ -1422,7 +1474,7 @@ adminmenu4();
 		       int i2 = Integer.parseInt(m2);
 		       String s= text3.getText();
 		      
-		       String sql="insert into Users  values("+i2+","+s+")";
+		       String sql="insert into Users  values("+i2+",'"+s+"')";
 			try {
 				st.executeUpdate(sql);
 			} catch (SQLException e1) {
@@ -1430,7 +1482,7 @@ adminmenu4();
 				e1.printStackTrace();
 			}	
 								
-		closeThis();
+			frame.dispose();
 		//adminmenu411();
 		adminmenu4();
 		}
@@ -1447,7 +1499,7 @@ adminmenu4();
 		button4.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		//创建新的窗口
 		adminmenu4();
 		}
@@ -1457,8 +1509,7 @@ adminmenu4();
 		
 	}
 	
-	@SuppressWarnings("null")
-	public static void adminmenu411(){
+	/*public static void adminmenu411(){
 		//创建新的窗口
 		JFrame frame= new JFrame("账号ID");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -1520,12 +1571,12 @@ adminmenu4();
 		
 		
 		
-	}
+	}*/
 	
 	public static void adminmenu42(){
 		
 		//创建新的窗口
-				JFrame frame = new JFrame("删除账号");
+				final JFrame frame = new JFrame("删除账号");
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setLayout(null);
 				//设置在屏幕的位置
@@ -1582,7 +1633,7 @@ adminmenu4();
 						e1.printStackTrace();
 					}
 				
-				closeThis();
+					frame.dispose();
 				adminmenu4();
 				}
 				});
@@ -1598,9 +1649,9 @@ adminmenu4();
 				button4.addActionListener(new ActionListener(){
 				//单击按钮执行的方法
 				public void actionPerformed(ActionEvent e) {
-				closeThis();
+					frame.dispose();
 				//创建新的窗口
-				adminmenu1();
+				adminmenu4();
 				}
 				});
 				
@@ -1613,7 +1664,7 @@ adminmenu4();
 	
 	public static void adminmenu43(){
 		//创建新的窗口
-		JFrame frame = new JFrame("修改账号信息");
+		final JFrame frame = new JFrame("修改账号信息");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
 		//设置在屏幕的位置
@@ -1624,9 +1675,9 @@ adminmenu4();
 		frame.setVisible(true);	
 		
 
-		final JTextField  text1=new JTextField(15);
-		final JTextField  text2=new JTextField(15);
-		final JTextField  text3=new JTextField(15);
+		final JTextField  text1=new JTextField(10);
+		final JTextField  text2=new JTextField(10);
+		final JTextField  text3=new JTextField(10);
 		JLabel la=new JLabel("现ID:");
 		JLabel la2=new JLabel("新职业ID:");
 		JLabel la3=new JLabel("新密码:");
@@ -1689,7 +1740,7 @@ adminmenu4();
 				e1.printStackTrace();
 			}
 			
-			  String sql2="UPDATE Users SET pwd="+s+"  WHERE userID="+i1+"";
+			  String sql2="UPDATE Users SET pwd='"+s+"'  WHERE userID="+i1+"";
 			  try {
 				st.executeUpdate(sql2);
 			} catch (SQLException e1) {
@@ -1699,7 +1750,7 @@ adminmenu4();
 			  
 			
 			
-		closeThis();
+				frame.dispose();
 		adminmenu4();
 		}
 		});
@@ -1715,9 +1766,9 @@ adminmenu4();
 		button4.addActionListener(new ActionListener(){
 		//单击按钮执行的方法
 		public void actionPerformed(ActionEvent e) {
-		closeThis();
+			frame.dispose();
 		//创建新的窗口
-		adminmenu1();
+		adminmenu4();
 		}
 		});
 		
@@ -1725,7 +1776,7 @@ adminmenu4();
 	
 	public static void adminmenu44(){
 		//创建新的窗口
-				JFrame frame = new JFrame("查看账号信息");
+				final JFrame frame = new JFrame("查看账号信息");
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setLayout(null);
 				//设置在屏幕的位置
@@ -1828,31 +1879,88 @@ adminmenu4();
 				button4.addActionListener(new ActionListener(){
 				//单击按钮执行的方法
 				public void actionPerformed(ActionEvent e) {
-				closeThis();
+					frame.dispose();
 				//创建新的窗口
-				adminmenu2();
+				adminmenu4();
 				}
-				});
-				
-				
-		
-		
-		
+				});	
 		
 	}
 	
+	public static void adminmenu66(){
+		final JFrame frame = new JFrame("管理员客户端");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLayout(null);
+			
+	//窗体大小
+	frame.setSize(500,300);
+	frame.setLocation(500, 100);
+	//按钮1
+	JButton button1 =new JButton("1.管理医院科室信息");
+	//在窗体上添加按钮
+	frame.add(button1);
+	button1.setBounds(145,50,200,30);
+	//显示窗体
+	frame.setVisible(true);
+	//添加点击事件监听器（你可以使用任何其他监听，看你想在什么情况下创建新的窗口了）
+	button1.addActionListener(new ActionListener(){
+	//单击按钮执行的方法
+	public void actionPerformed(ActionEvent e) {
+	frame.dispose();
+	adminmenu1();
+	}
+	});
+
+
+	//按钮2
+	JButton button2 =new JButton("2.管理药品信息");
+	//在窗体上添加按钮
+	frame.add(button2);
+	button2.setBounds(145,80,200,30);
+	//显示窗体
+	frame.setVisible(true);
+	//添加点击事件监听器（你可以使用任何其他监听，看你想在什么情况下创建新的窗口了）
+	button2.addActionListener(new ActionListener(){
+	//单击按钮执行的方法
+	public void actionPerformed(ActionEvent e) {
+		frame.dispose();
+	adminmenu2();
+	}
+	});
+
+	//按钮3
+	JButton button3 =new JButton("3.管理收费信息");
+	//在窗体上添加按钮
+	frame.add(button3);
+	button3.setBounds(145,110,200,30);
+	//显示窗体
+	frame.setVisible(true);
+	//添加点击事件监听器（你可以使用任何其他监听，看你想在什么情况下创建新的窗口了）
+	button3.addActionListener(new ActionListener(){
+	//单击按钮执行的方法
+	public void actionPerformed(ActionEvent e) {
+	frame.dispose();
+	adminmenu3();
+	}
+	});
+
+	//按钮4
+	JButton button4 =new JButton("4.管理账号信息");
+	//在窗体上添加按钮
+	frame.add(button4);
+	button4.setBounds(145,140,200,30);
+	//显示窗体
+	frame.setVisible(true);
+	//添加点击事件监听器（你可以使用任何其他监听，看你想在什么情况下创建新的窗口了）
+	button4.addActionListener(new ActionListener(){
+	//单击按钮执行的方法
+	public void actionPerformed(ActionEvent e) {
+		frame.dispose();
+	adminmenu4();
+	}
+	});
+		
+	}
 	
-	
-	public static void closeThis() {     frame.dispose();   }
-	
-	 public class QuitAction implements ActionListener {
-		    private JFrame frame;
-		    public QuitAction(JFrame frame){this.frame = frame;}
-		 @Override
-		 public void actionPerformed(ActionEvent e) {
-		  // TODO Auto-generated method stub
-		  frame.dispose();
-		 }
-		}
 	 
 }
