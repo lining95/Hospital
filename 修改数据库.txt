@@ -1,0 +1,86 @@
+use Hospital;
+
+create table Roles  --//身份：管理员，收费人员，医生，药师，院长，病人
+(
+	roleID int identity(1,1) primary key, --identity(1,1)从1开始每次自增1
+	roleName varchar(20) not null	
+);
+
+create table Users  --用户信息：用户ID,密码
+(
+	userID int identity(100,1) primary key,
+	roleID int foreign key references Roles(roleID),
+	pwd varchar(20) not null
+);
+
+create table Patient  --病人信息
+(
+	PatID int identity(1000,1) primary key,
+	PatName varchar(20) not null,
+	PatGender varchar(4) not null,	--F:女 M:男
+	PatAge int not null check(Patage between 0 and 150),
+	PatPhone varchar(11)  null,
+	roleID int foreign key references Roles(roleID)
+);
+
+create table Department  --科室
+(
+	DeptID int not null identity(1,1) primary key,
+	DeptName varchar(20) not null
+);
+
+create table Medicine  --药品
+(
+	MedID int not null primary key,
+	MedName varchar(50) not null,	
+	MedNum int not null,
+	price float not null
+);
+
+create table Doctor  --医生
+(
+	DoctorID int  primary key foreign key references Users(UserID),
+	DoctorName varchar(20) not null,
+	DoctorDeptID int foreign key references Department(DeptID),
+);
+
+create table Registration  --预约
+(
+	RegID int not null identity(1,1) primary key,
+	PatientID int not null foreign key references Patient(PatID),
+	DoctorID int foreign key references Doctor(DoctorID),
+	RegTime date not null,	
+	RegState varchar(10) --预约状态：预约，就诊，超时
+);
+
+create table charge  --收费单
+(
+	RegID int primary key foreign key references Registration(RegID),
+	sumprice float,
+	chargeState	varchar(10)  --收费状态：未支付，已支付
+);
+
+create table MedItem  --收费单药品明细
+(
+	MedItemID int identity(1,1) primary key,
+	MedID int foreign key references Medicine(MedID),
+	MedNum int,	
+	price float,
+	chargeID int foreign key references charge(RegID) 
+);
+
+
+
+insert into Roles values('管理员');
+insert into Roles values('收费人员');
+insert into Roles values('医生');
+insert into Roles values('药师');
+insert into Roles values('院长');
+insert into Roles values('病人');
+
+insert into Users values(1,'666666');
+insert into Users values(2,'666666');
+insert into Users values(3,'666666');
+insert into Users values(4,'666666');
+insert into Users values(5,'666666');
+
