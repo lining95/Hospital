@@ -2,6 +2,7 @@ package com.lining;
 
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -13,6 +14,7 @@ import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -34,9 +36,7 @@ public class Gui {
 	private JTextField textField_3;
 	private JTextField textField_4;
 	private JTextField textField_5;
-	private JTextField textField_6;
 	private JTextField textField_7;
-	private JTable table;
 	private JTable table_2;
 	private JTable table_1;
 
@@ -61,7 +61,6 @@ public class Gui {
 	 */
 	public Gui() {
 		initialize();
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //关闭窗口时退出程序
 	}
 
 	/**
@@ -72,13 +71,13 @@ public class Gui {
 		jFrame.setBounds(550, 350, 800, 500);
 		jFrame.setResizable(false);
 		jFrame.setVisible(true);
-		JPanel jPanelReg = new JPanel();
-		JPanel jPanelCharge = new JPanel();
-		JPanel jPanelExit = new JPanel();
+		JPanel jPanelReg = new JPanel();//挂号
+		JPanel jPanelCharge = new JPanel();//收费
+		JPanel jPanelExit = new JPanel();//退出
 
 		JTabbedPane jTabbedPane = new JTabbedPane(SwingConstants.TOP);// 选项卡上添加组件
 
-		JPanel jPanelLogin = new JPanel();
+		JPanel jPanelLogin = new JPanel();//登录
 		jTabbedPane.add("登录", jPanelLogin);
 		jTabbedPane.setEnabledAt(0, true);
 		jPanelLogin.setLayout(null);
@@ -102,7 +101,7 @@ public class Gui {
 		passwordField.setBounds(357, 212, 233, 31);
 		jPanelLogin.add(passwordField);
 
-		JButton btnNewButton = new JButton("\u767B\u5F55");
+		JButton btnNewButton = new JButton("\u767B\u5F55");//登录按钮
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String userid = textField.getText();
@@ -164,7 +163,7 @@ public class Gui {
 		btnNewButton.setBounds(255, 272, 97, 31);
 		jPanelLogin.add(btnNewButton);
 
-		JButton button = new JButton("\u53D6\u6D88");
+		JButton button = new JButton("\u53D6\u6D88");//取消按钮
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				textField.setText(null);
@@ -178,7 +177,7 @@ public class Gui {
 		lblNewLabel_7.setIcon(new ImageIcon("F:\\JAVA\u533B\u9662\\\u6302\u53F7\u6536\u8D39\u56FE\u6807.jpg"));
 		lblNewLabel_7.setBounds(73, 10, 672, 132);
 		jPanelLogin.add(lblNewLabel_7);
-		JPanel jPanelApt = new JPanel();
+		JPanel jPanelApt = new JPanel();//查看预约信息
 		jTabbedPane.add("查看预约信息", jPanelApt);
 		jPanelApt.setLayout(null);
 
@@ -193,28 +192,31 @@ public class Gui {
 		textField_1.setColumns(10);
 		
 		String[] columnNames={"预约ID","患者姓名","科室","预约时间"}; //列名 
-		Object[][] rowData=new Object[5][4]; //表格数据
-		table_2 = new JTable(rowData,columnNames);
+		Object[][] rowData=new Object[13][4]; //表格数据
+		table_2 = new JTable(rowData,columnNames);//查看预约信息表
+		table_2.setFont(new Font("宋体", Font.PLAIN, 18));
+		table_2.setEnabled(false);
 		
-		JButton btnNewButton_1 = new JButton("\u67E5\u770B");
+		JButton btnNewButton_1 = new JButton("\u67E5\u770B");//查看按钮
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String Reg=textField_1.getText();
 				int RegID = Integer.parseInt(Reg);
-				String sql="select Registration.RegID,Patient.PatName,Department.DeptName,Registration.RegTime from Registration,Patient,Department ,Doctor where  Registration.PatientID=Patient.PatID and Department.DeptID=Doctor.DoctorDeptID and Registration.DoctorID=Doctor.DoctorID and RegID=?";
+				String sql="select Registration.RegID,Patient.PatName,Department.DeptName,Registration.RegTime from Registration,Patient,Department ,Doctor where  Registration.PatientID=Patient.PatID and Department.DeptID=Doctor.DoctorDeptID and Registration.DoctorID=Doctor.DoctorID and Registration.RegState='预约' and RegID=?";
 				try {
 					Connection con = SQLOperate.Connection();
 					PreparedStatement state = con.prepareStatement(sql);
 					state.setInt(1, RegID);
 					ResultSet rs = state.executeQuery();
-					int count=0;
+					//int count=0;
 
 					while (rs.next()){ //遍历查询结果
-							rowData[count][0]=rs.getString("RegID"); //初始化数组内容 
-							rowData[count][1]=Integer.toString(rs.getInt("PatName"));
-							rowData[count][2]=rs.getString("DeptName");
-							rowData[count][3]=rs.getString("RegTime");
-						count++;
+							rowData[0][0]=rs.getString("RegID"); //初始化数组内容 
+							rowData[0][1]=rs.getString("PatName");
+							rowData[0][2]=rs.getString("DeptName");
+							rowData[0][3]=rs.getString("RegTime");
+							table_2.updateUI();
+							//count++;
 						}
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
@@ -226,20 +228,20 @@ public class Gui {
 		btnNewButton_1.setBounds(386, 32, 74, 23);
 		jPanelApt.add(btnNewButton_1);
 
-		JButton btnNewButton_2 = new JButton("\u67E5\u770B\u5168\u90E8");
+		JButton btnNewButton_2 = new JButton("\u67E5\u770B\u5168\u90E8");//查看全部按钮
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String sql="select Registration.RegID,Patient.PatName,Department.DeptName,Registration.RegTime from Registration,Patient,Department ,Doctor where  Registration.PatientID=Patient.PatID and Department.DeptID=Doctor.DoctorDeptID and Registration.DoctorID=Doctor.DoctorID ";
+				String sql="select Registration.RegID,Patient.PatName,Department.DeptName,Registration.RegTime from Registration,Patient,Department ,Doctor where  Registration.PatientID=Patient.PatID and Department.DeptID=Doctor.DoctorDeptID and Registration.DoctorID=Doctor.DoctorID and Registration.RegState='预约'";
 				try {
 					
 					ResultSet rs = SQLOperate.SqlSel(sql);
 					int count=0;
-
 					while (rs.next()){ //遍历查询结果
 							rowData[count][0]=rs.getString("RegID"); //初始化数组内容 
-							rowData[count][1]=Integer.toString(rs.getInt("PatName"));
+							rowData[count][1]=rs.getString("PatName");
 							rowData[count][2]=rs.getString("DeptName");
 							rowData[count][3]=rs.getString("RegTime");
+							table_2.updateUI();
 						count++;
 						}
 				} catch (SQLException e1) {
@@ -252,18 +254,21 @@ public class Gui {
 		jPanelApt.add(btnNewButton_2);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 77, 769, 356);
+		scrollPane.setBounds(10, 77, 769, 292);
 		jPanelApt.add(scrollPane);
 		
 		
 		table_2.setShowVerticalLines(false);
-		/*table_2.setModel(new DefaultTableModel(new Object[15][4] , new String[] { "\u9884\u7EA6ID",
-				"\u60A3\u8005\u59D3\u540D", "\u9884\u7EA6\u79D1\u5BA4", "\u9884\u7EA6\u65F6\u95F4" }));
-		table_2.setRowHeight(22);*/
+		table_2.setRowHeight(20);
 		scrollPane.setViewportView(table_2);
-
+		
+		JButton btnNewButton_8 = new JButton("\u9884\u7EA6\u6302\u53F7");
+		btnNewButton_8.setFont(new Font("宋体", Font.PLAIN, 16));
+		btnNewButton_8.setBounds(582, 389, 120, 33);
+		jPanelApt.add(btnNewButton_8);
 		jTabbedPane.setEnabledAt(1, false);
-		jTabbedPane.add("挂号", jPanelReg);
+		
+		jTabbedPane.add("挂号", jPanelReg);//挂号
 		jPanelReg.setLayout(null);
 
 		JLabel lblNewLabel_2 = new JLabel("\u59D3\u3000\u3000\u540D\uFF1A");
@@ -310,70 +315,79 @@ public class Gui {
 		textField_5.setColumns(10);
 		textField_5.setBounds(308, 156, 215, 30);
 		jPanelReg.add(textField_5);
-
-		textField_6 = new JTextField();
-		textField_6.setColumns(10);
-		textField_6.setBounds(308, 196, 215, 30);
-		jPanelReg.add(textField_6);
-
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(308, 196, 110, 30);
+		jPanelReg.add(comboBox);
+		
+		String sltDept="select DeptName from Department";
+		ResultSet rs= SQLOperate.SqlSel(sltDept);
+		try {
+			while(rs.next()){comboBox.addItem(rs.getString(1));}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		JButton btnNewButton_3 = new JButton("\u6302\u53F7");
-		btnNewButton_3.addActionListener(new ActionListener() {
+		
+		btnNewButton_3.addActionListener(new ActionListener() {//挂号按钮
 			public void actionPerformed(ActionEvent e) {
-				String patName = textField_2.getText();
-				String patgender = textField_3.getText();
-				String patAge = textField_4.getText();
-				String patTel = textField_5.getText();
-				String patDept = textField_6.getText();
-				//String username=patName+new SimpleDateFormat("HH:mm:ss").format(new Date())	;			
-				String sql1="insert into Users values(6,'','"+patName+"')";
-				SQLOperate.SqlUpdata(sql1);
-				String sql2="select * from Users where userName='"+patName+"'";
-				ResultSet rs1 =SQLOperate.SqlSel(sql2);
-				int userID=-1;
+				
 				try {
-					while(rs1.next()){
-						userID=rs1.getInt(0);
+					String patName = textField_2.getText();
+					String patgender = textField_3.getText();
+					String Age = textField_4.getText();
+					int patAge = Integer.parseInt(Age);
+					String patTel = textField_5.getText();
+					String deptName=(String)comboBox.getSelectedItem();
+					
+					//存储新病人信息
+					String sql1="insert into Patient values('"+patName+"','"+patgender+"',?,'"+patTel+"',6)";
+					Connection con = SQLOperate.Connection();
+					PreparedStatement st = con.prepareStatement(sql1);
+					st.setInt(1, patAge);
+					st.executeUpdate();
+					//获取病人ID
+					String sql2="select * from Patient where PatName='"+patName+"'";
+					ResultSet rs1 =SQLOperate.SqlSel(sql2);
+					int userID=-1;							
+						while(rs1.next()){
+							userID=rs1.getInt("PatID");
 						}
-				} catch (SQLException e1) {
+					
+					//通过科室取得医生ID
+					int doctID=-1;
+					String sql3="select DoctorID from Doctor where DoctorDeptID=(select DeptID from Department where DeptName='"+deptName+"')";
+					ResultSet rs2 =SQLOperate.SqlSel(sql3);
+					
+						while(rs2.next()){
+							doctID=rs2.getInt("DoctorID");
+							}
+						String regtime=new SimpleDateFormat("HH:mm:ss").format(new Date());
+						
+						String sql4="insert into Registration(PatientID,DoctorID,RegTime,RegState) values(?,?,'"+regtime+"','挂号')";
+						Connection con1 = SQLOperate.Connection();
+						PreparedStatement state = con1.prepareStatement(sql4);
+						state.setInt(1, userID);
+						state.setInt(2, doctID);
+						
+						int i= state.executeUpdate();
+						if(i>0){
+							JOptionPane.showMessageDialog(null, "挂号成功!");
+						}else{JOptionPane.showMessageDialog(null, "挂号失败!");}
+				} catch (HeadlessException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}finally {
-					try {
-						rs1.close();
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-				int doctID;
-				String sql3="select * from Doctor where DoctorDeptID=";
-				ResultSet rs2 =SQLOperate.SqlSel(sql3);
-				try {
-					while(rs2.next()){
-						doctID=rs2.getInt(0);
-						}
-				} catch (SQLException e1) {
+				} 
+				catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}finally {
-					try {
-						rs2.close();
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+				}	
+				
 				}
-				
-				String regtime=new SimpleDateFormat("HH:mm:ss").format(new Date());
-				String sql4="insert into Registration(PatientID,DoctorID,RegTime,RegState) values('"
-						+ "+userID+','+doctID+','+regtime+','挂号')";
-				int i=SQLOperate.SqlUpdata(sql4);
-				if(i>0){
-					JOptionPane.showMessageDialog(null, "挂号成功!");
-				}else{JOptionPane.showMessageDialog(null, "挂号失败!");}
-				
-			}
 		});
+		
 		btnNewButton_3.setFont(new Font("宋体", Font.PLAIN, 20));
 		btnNewButton_3.setBounds(226, 264, 93, 30);
 		jPanelReg.add(btnNewButton_3);
@@ -382,6 +396,7 @@ public class Gui {
 		btnNewButton_4.setFont(new Font("宋体", Font.PLAIN, 20));
 		btnNewButton_4.setBounds(376, 264, 93, 30);
 		jPanelReg.add(btnNewButton_4);
+		
 		jTabbedPane.add("收费", jPanelCharge);
 		jPanelCharge.setLayout(null);
 
@@ -407,7 +422,10 @@ public class Gui {
 		scrollPane_1.setBounds(30, 90, 727, 316);
 		jPanelCharge.add(scrollPane_1);
 		
-		table_1 = new JTable();
+		
+		String[] cName={"订单ID","总价格"}; //列名 
+		Object[][] rData=new Object[13][4]; //表格数据
+		table_1 = new JTable(rData,cName);
 		scrollPane_1.setViewportView(table_1);
 		
 		jTabbedPane.add("退出", jPanelExit);	
