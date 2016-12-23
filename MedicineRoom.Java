@@ -13,8 +13,8 @@ public class Mdcn extends JFrame implements ActionListener {
 	Connection con;
       Statement sql;
       JMenuBar bar=null;
-      JMenu menu1,menu2;
-      JMenuItem item1,item2;
+      JMenu menu1,menu2,menu3;
+      JMenuItem item1,item2,item3;
       JButton b1,b2,b3, b4,b5, b6,b7,b8,b9,b10;
       JTextField tf1,tf2,tf3,tf4, tf5;
       JPasswordField tf6;
@@ -27,16 +27,21 @@ public class Mdcn extends JFrame implements ActionListener {
 		bar=new JMenuBar();
 		menu1=new JMenu("登录");
 		menu2=new JMenu("药房");
+		menu3=new JMenu("退出");
 //		item1=new JMenuItem("登录");
 //		item2=new JMenuItem("药房");
+		item3=new JMenuItem("退出");
 //		menu1.add(item1);
 //		menu2.add(item2);
 		bar.add(menu1);
 		bar.add(menu2);
+		bar.add(menu3);
 		//menu1.isVisible();
 		//menu2.isEnabled();
+		menu3.add(item3);
 //		item1.addActionListener(this);
 //		item2.addActionListener(this);
+		item3.addActionListener(this);
 		
 		
 		
@@ -157,21 +162,21 @@ public class Mdcn extends JFrame implements ActionListener {
 	    tf4=new JTextField(16);
 	    bv3=Box.createVerticalBox();
 	    bv3.add(new JLabel("药品号"));
-	    bv3.add(Box.createVerticalStrut(100));
-	    bv3.add(new JLabel("药品名"));
-	    bv3.add(Box.createVerticalStrut(100));
+	    bv3.add(Box.createVerticalStrut(50));
+//	    bv3.add(new JLabel("药品名"));
+//	    bv3.add(Box.createVerticalStrut(100));
 	    bv3.add(new JLabel("药品数量"));
-	    bv3.add(Box.createVerticalStrut(100));
+	    bv3.add(Box.createVerticalStrut(240));
 	 //   bv3.add(new JLabel("药品价格"));
 	  //  bv3.add(Box.createVerticalStrut(80));
 	    
 	    bv4=Box.createVerticalBox();
 	    bv4.add(tf1);
-	    bv4.add(Box.createVerticalStrut(80));
-	    bv4.add(tf2);
-	    bv4.add(Box.createVerticalStrut(80));
+	    bv4.add(Box.createVerticalStrut(50));
+//	    bv4.add(tf2);
+//	    bv4.add(Box.createVerticalStrut(80));
 	    bv4.add(tf3);
-	    bv4.add(Box.createVerticalStrut(80));
+	    bv4.add(Box.createVerticalStrut(240));
 	  //  bv4.add(tf4);
 	   // bv4.add(Box.createVerticalStrut(80));
 	    
@@ -194,10 +199,8 @@ public class Mdcn extends JFrame implements ActionListener {
 	    setBackground(Color.pink);
 	    
 	    menu2.disable();
-
-	    
-	       
-	    
+        menu3.disable();
+	        
 	    
 	}
 	
@@ -216,7 +219,7 @@ md.setVisible(true);
 
 
 
-	@SuppressWarnings({ "deprecation" })
+	@SuppressWarnings({ "deprecation", "unused" })
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -235,14 +238,19 @@ md.setVisible(true);
 		if(e.getSource()==b4){
 			String num2= tf6.getText().trim();		
 			String num1=tf5.getText().trim();			
-		    String sql1="select * from Users where userID='"+num1+"' and pwd='"+num2+"'" ;
+		    String sql1="select * from Users where userID='"+num1+"' and pwd='"+num2+"' and roleID=4" ;
 		   ResultSet rs=SQLOperate.SqlSel(sql1);
 	
 		    try {
 				if(rs.next())
 				{
-					menu1.hide();
-					menu2.enable();				
+					tf5.setText("");
+					tf6.setText("");
+					
+					menu2.enable();
+					menu3.enable();
+					JOptionPane.showMessageDialog(this, "登录成功！","提示对话框",JOptionPane.INFORMATION_MESSAGE);
+					menu1.disable();
 				}	
 				else{
 					JOptionPane.showMessageDialog(this, "用户名或密码有误！","提示对话框",JOptionPane.INFORMATION_MESSAGE);
@@ -260,7 +268,7 @@ md.setVisible(true);
 			tf6.setText("");
 		}
 		if(e.getSource()==b1){
-			String MedItemID,MedID,MedNum,price;
+			String MedItemID,MedID,MedNum,price,chargeID;
 			
 			String sql2="select * from MedItem order by MedItemID desc";
 			ResultSet rs=SQLOperate.SqlSel(sql2);
@@ -270,7 +278,8 @@ md.setVisible(true);
 			    MedID=rs.getString("MedID");
 			    MedNum=rs.getString("MedNum");
 			    price=rs.getString("price");
-			    ta1.append("药品收费单号:"+MedItemID+"\r\n"+"药品号:"+MedID+"\r\n"+"药品数量:"+MedNum+"\r\n"+"单价:"+price+"\r\n\r\n");
+			    chargeID=rs.getString("chargeID");
+			    ta1.append("药品收费单号:"+MedItemID+"\r\n"+"药品号:"+MedID+"\r\n"+"药品数量:"+MedNum+"\r\n"+"单价:"+price+"\r\n"+"预约号"+chargeID+"\r\n\r\n");
 			       
 				}
 				
@@ -295,10 +304,10 @@ md.setVisible(true);
 			try {
 				while(rs.next()){
 					RegID=rs.getString("RegID");
-					MedItemID=rs.getString("MedItemID");
+					//MedItemID=rs.getString("MedItemID");
 					sumprice=rs.getString("sumprice");
 					chargeState=rs.getString("chargeState");
-					ta2.append("预约序号:"+RegID+"\r\n"+"药品收费单号:"+MedItemID+"\r\n"+"药品总价:"+sumprice+"\r\n"+"支付状态:"+chargeState+"\r\n\r\n");
+					ta2.append("预约序号:"+RegID+"\r\n"+"药品总价:"+sumprice+"\r\n"+"支付状态:"+chargeState+"\r\n\r\n");
 				}
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
@@ -322,7 +331,38 @@ md.setVisible(true);
 				e1.printStackTrace();
 			}
 		}
-		
+		if(e.getSource()==b3){
+			String MedID,MedNum;
+			MedID=tf1.getText().trim();
+			MedNum = tf3.getText();
+			int n=Integer.parseInt(MedNum);
+			String sql5="update Medicine set MedNum= '"+n+"'where MedID='"+MedID+"'";
+			int x=SQLOperate.SqlUpdata(sql5);
+			if(x==0){
+				tf1.setText("");
+				tf3.setText("");
+				JOptionPane.showMessageDialog(this, "更新失败！","提示对话框",JOptionPane.INFORMATION_MESSAGE);
+			}
+			else{
+				tf1.setText("");
+				tf3.setText("");
+				JOptionPane.showMessageDialog(this, "更新成功！","提示对话框",JOptionPane.INFORMATION_MESSAGE);
+			}
+		}
+		if(e.getSource()==b10){
+			tf1.setText("");
+			tf3.setText("");
 	}
-
+		if(e.getSource()==item3){
+			int n = JOptionPane.showConfirmDialog(null, "你确定要退出吗?", "提示",JOptionPane.YES_NO_OPTION);
+			if(n==0){
+				
+			    menu2.disable();
+		        menu3.disable();
+				menu1.enable();
+			}
+		
+		}
+	}
 }
+
