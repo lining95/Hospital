@@ -15,18 +15,16 @@ public class SQLOperate {
 			// 加载数据库驱动
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			// 建立数据库连接
-			// con=(Connection)DriverManager.getConnection("jdbc:sqlserver://localhost:1433;integratedSecurity=true;DatabaseName=Hospital");
 			con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; DatabaseName=Hospital", "sa", "sa");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return con;
 	}
-
+	
+	//更新
 	public static int SqlUpdata(String sql) {
 		Connection con = Connection();
 		// 创建语句对象
@@ -35,15 +33,14 @@ public class SQLOperate {
 		try {
 			st = con.createStatement();
 			yt = st.executeUpdate(sql);
-			closeCon(con);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return yt;
 		// insert,update,delete,通常用executeUpdate
 	}
-
+	
+	//查询
 	public static ResultSet SqlSel(String sql) {
 		Connection con = Connection();
 		// 创建语句对象
@@ -52,27 +49,11 @@ public class SQLOperate {
 		try {
 			st = con.createStatement();
 			rs = st.executeQuery(sql);
-			closeCon(con);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return rs;
 		// select语句用executeQuery，返回一个ResultSet结果集，二维表
 	}
 	
-	public static void closeCon(Connection con){
-		try {
-			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	/*
-	 * //测试是否连接成功 public static void main(String[] args) { Connection
-	 * con=Connection(); if(con!=null){ System.out.println("连接成功！"); } }
-	 */
-
 }

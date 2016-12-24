@@ -33,16 +33,13 @@ public class Gui {
 	private JPasswordField passwordField;
 	private JTextField textField_1;
 	private JTextField textField_2;
-	private JTextField textField_3;
 	private JTextField textField_4;
 	private JTextField textField_5;
 	private JTextField textField_7;
 	private JTable table_2;
 	private JTable table_1;
 
-	/**
-	 * Launch the application.
-	 */
+	//Launch the application.
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -56,16 +53,13 @@ public class Gui {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
+	//Create the application.
 	public Gui() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
+
+	//Initialize the contents of the frame.
 	private void initialize() {
 		JFrame jFrame = new JFrame("挂号收费");
 		jFrame.setBounds(550, 350, 800, 500);
@@ -133,31 +127,6 @@ public class Gui {
 				textField.setText(null);
 				passwordField.setText(null);
 
-				// ResultSet rs = SQLOperate.SqlSel(sql);
-				/*
-				 * try { JOptionPane.showMessageDialog(null,
-				 * rs.getString("pwd")); } catch (HeadlessException e1) { //
-				 * TODO Auto-generated catch block e1.printStackTrace(); } catch
-				 * (SQLException e1) { // TODO Auto-generated catch block
-				 * e1.printStackTrace(); }
-				 */
-				/*
-				 * try { if (!rs.next()) { if (pwd.equals(rs.getString("pwd")))
-				 * { JOptionPane.showMessageDialog(null, "登录成功");
-				 * System.exit(0); } else { JOptionPane.showMessageDialog(null,
-				 * "密码输入错误!"); } } else { JOptionPane.showMessageDialog(null,
-				 * "用户名不存在"); } } catch (HeadlessException e1) { // TODO
-				 * Auto-generated catch block e1.printStackTrace(); } catch
-				 * (SQLException e1) { // TODO Auto-generated catch block
-				 * e1.printStackTrace(); }
-				 */
-				/*
-				 * if (!rs.next()) { JOptionPane.showMessageDialog(null,
-				 * "输入有误！请重新输入！"); } else { jTabbedPane.setEnabledAt(1, true);
-				 * jTabbedPane.setEnabledAt(2, true);
-				 * jTabbedPane.setEnabledAt(3, true);
-				 * JOptionPane.showMessageDialog(null, "登录成功！"); }
-				 */
 			}
 		});
 		btnNewButton.setBounds(255, 272, 97, 31);
@@ -208,18 +177,24 @@ public class Gui {
 					PreparedStatement state = con.prepareStatement(sql);
 					state.setInt(1, RegID);
 					ResultSet rs = state.executeQuery();
-					//int count=0;
-
+					
+					int cn=table_2.getRowCount(); //清空表内数据					
+					for(int i=0;i<cn;i++){
+							rowData[i][0]=null;
+							rowData[i][1]=null;
+							rowData[i][2]=null;
+							rowData[i][3]=null;
+							table_2.updateUI();
+					}
+					
 					while (rs.next()){ //遍历查询结果
 							rowData[0][0]=rs.getString("RegID"); //初始化数组内容 
 							rowData[0][1]=rs.getString("PatName");
 							rowData[0][2]=rs.getString("DeptName");
 							rowData[0][3]=rs.getString("RegTime");
 							table_2.updateUI();
-							//count++;
 						}
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				
@@ -233,19 +208,25 @@ public class Gui {
 			public void actionPerformed(ActionEvent e) {
 				String sql="select Registration.RegID,Patient.PatName,Department.DeptName,Registration.RegTime from Registration,Patient,Department ,Doctor where  Registration.PatientID=Patient.PatID and Department.DeptID=Doctor.DoctorDeptID and Registration.DoctorID=Doctor.DoctorID and Registration.RegState='预约'";
 				try {
-					
-					ResultSet rs = SQLOperate.SqlSel(sql);
+					int cn=table_2.getRowCount(); //清空表内数据					
+					for(int i=0;i<cn;i++){
+							rowData[i][0]=null;
+							rowData[i][1]=null;
+							rowData[i][2]=null;
+							rowData[i][3]=null;
+							table_2.updateUI();
+					}
 					int count=0;
+					ResultSet rs = SQLOperate.SqlSel(sql);
 					while (rs.next()){ //遍历查询结果
 							rowData[count][0]=rs.getString("RegID"); //初始化数组内容 
 							rowData[count][1]=rs.getString("PatName");
 							rowData[count][2]=rs.getString("DeptName");
 							rowData[count][3]=rs.getString("RegTime");
 							table_2.updateUI();
-						count++;
+							count++;
 						}
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -263,8 +244,32 @@ public class Gui {
 		scrollPane.setViewportView(table_2);
 		
 		JButton btnNewButton_8 = new JButton("\u9884\u7EA6\u6302\u53F7");
+		btnNewButton_8.addActionListener(new ActionListener() {//预约挂号按钮
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int cn=table_2.getRowCount();
+					if(cn==0){JOptionPane.showMessageDialog(null, "没有预约信息，不能挂号!");}
+					else{
+						String reg=(String) rowData[0][0];
+						int RegID = Integer.parseInt(reg);
+						
+						String sql="UPDATE Registration set RegState='挂号' where RegID=?";
+						Connection con = SQLOperate.Connection();
+						PreparedStatement state = con.prepareStatement(sql);
+						state.setInt(1, RegID);
+						
+						int i= state.executeUpdate();
+						if(i>0){JOptionPane.showMessageDialog(null, "挂号成功!");}
+						else{JOptionPane.showMessageDialog(null, "挂号失败!");}}
+					} catch (NumberFormatException e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+			}
+		});
 		btnNewButton_8.setFont(new Font("宋体", Font.PLAIN, 16));
-		btnNewButton_8.setBounds(582, 389, 120, 33);
+		btnNewButton_8.setBounds(582, 379, 120, 33);
 		jPanelApt.add(btnNewButton_8);
 		jTabbedPane.setEnabledAt(1, false);
 		
@@ -301,11 +306,6 @@ public class Gui {
 		jPanelReg.add(textField_2);
 		textField_2.setColumns(10);
 
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(308, 76, 215, 30);
-		jPanelReg.add(textField_3);
-
 		textField_4 = new JTextField();
 		textField_4.setColumns(10);
 		textField_4.setBounds(308, 116, 215, 30);
@@ -316,6 +316,13 @@ public class Gui {
 		textField_5.setBounds(308, 156, 215, 30);
 		jPanelReg.add(textField_5);
 		
+		JComboBox comboBox_1 = new JComboBox();
+		comboBox_1.setBounds(308, 76, 67, 30);
+		jPanelReg.add(comboBox_1);
+		comboBox_1.addItem("男");
+		comboBox_1.addItem("女");
+		
+		
 		JComboBox comboBox = new JComboBox();
 		comboBox.setBounds(308, 196, 110, 30);
 		jPanelReg.add(comboBox);
@@ -325,7 +332,6 @@ public class Gui {
 		try {
 			while(rs.next()){comboBox.addItem(rs.getString(1));}
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -336,7 +342,7 @@ public class Gui {
 				
 				try {
 					String patName = textField_2.getText();
-					String patgender = textField_3.getText();
+					String patgender = (String)comboBox_1.getSelectedItem();
 					String Age = textField_4.getText();
 					int patAge = Integer.parseInt(Age);
 					String patTel = textField_5.getText();
@@ -377,11 +383,9 @@ public class Gui {
 							JOptionPane.showMessageDialog(null, "挂号成功!");
 						}else{JOptionPane.showMessageDialog(null, "挂号失败!");}
 				} catch (HeadlessException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} 
 				catch (SQLException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}	
 				
@@ -409,24 +413,112 @@ public class Gui {
 		textField_7.setBounds(229, 34, 191, 28);
 		jPanelCharge.add(textField_7);
 		textField_7.setColumns(10);
-
-		JButton btnNewButton_5 = new JButton("\u67E5\u770B");
-		btnNewButton_5.setBounds(450, 40, 76, 23);
-		jPanelCharge.add(btnNewButton_5);
-
-		JButton btnNewButton_6 = new JButton("\u67E5\u770B\u5168\u90E8");
-		btnNewButton_6.setBounds(565, 34, 93, 29);
-		jPanelCharge.add(btnNewButton_6);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(30, 90, 727, 316);
+		scrollPane_1.setBounds(30, 90, 727, 278);
 		jPanelCharge.add(scrollPane_1);
-		
 		
 		String[] cName={"订单ID","总价格"}; //列名 
 		Object[][] rData=new Object[13][4]; //表格数据
-		table_1 = new JTable(rData,cName);
+		table_1 = new JTable(rData,cName);//收费表
+		table_1.setEnabled(false);
 		scrollPane_1.setViewportView(table_1);
+		table_1.setRowHeight(18);
+		
+		JButton btnNewButton_5 = new JButton("\u67E5\u770B");
+		btnNewButton_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String Reg=textField_7.getText();
+				int RegID = Integer.parseInt(Reg);
+				String sql="select RegID,sumprice from charge where chargeState='未支付' and RegID=?";
+				try {
+					Connection con = SQLOperate.Connection();
+					PreparedStatement state = con.prepareStatement(sql);
+					state.setInt(1, RegID);
+					ResultSet rs = state.executeQuery();
+					
+					int cn=table_1.getRowCount(); //清空表内数据					
+					for(int i=0;i<cn;i++){
+							rData[i][0]=null;
+							rData[i][1]=null;
+							rData[i][2]=null;
+							rData[i][3]=null;
+							table_1.updateUI();
+					}
+					
+					while (rs.next()){ //遍历查询结果
+							rData[0][0]=rs.getString("RegID"); //初始化数组内容 
+							rData[0][1]=rs.getString("sumprice");
+							table_1.updateUI();
+						}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnNewButton_5.setBounds(450, 34, 76, 29);
+		jPanelCharge.add(btnNewButton_5);
+
+		JButton btnNewButton_6 = new JButton("\u67E5\u770B\u5168\u90E8");
+		btnNewButton_6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {//收費查看全部按鈕
+				try {
+					int cn=table_1.getRowCount(); //清空表内数据					
+					for(int i=0;i<cn;i++){
+							rData[i][0]=null;
+							rData[i][1]=null;
+							rData[i][2]=null;
+							rData[i][3]=null;
+							table_1.updateUI();
+					}
+					String sql="select RegID,sumprice from charge where chargeState='未支付'";
+					ResultSet rs = SQLOperate.SqlSel(sql);
+					while (rs.next()){ //遍历查询结果
+							rData[0][0]=rs.getString("RegID"); //初始化数组内容 
+							rData[0][1]=rs.getString("sumprice");
+							table_1.updateUI();
+						}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+		btnNewButton_6.setBounds(565, 34, 93, 29);
+		jPanelCharge.add(btnNewButton_6);
+		
+		JButton btnNewButton_9 = new JButton("\u6536\u8D39");
+		btnNewButton_9.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {//收费按钮
+				{
+					try {
+						int cn=table_1.getRowCount();
+						if(cn==0){JOptionPane.showMessageDialog(null, "没有收费信息，不能收费!");}
+						else{
+							String reg=(String) (String) rData[0][0];
+							int RegID = Integer.parseInt(reg);
+							
+							String sql="UPDATE charge set chargeState='已收费' where RegID=?";
+							Connection con = SQLOperate.Connection();
+							PreparedStatement state = con.prepareStatement(sql);
+							state.setInt(1, RegID);
+							
+							int i= state.executeUpdate();
+							if(i>0){JOptionPane.showMessageDialog(null, "收费成功!");}
+							else{JOptionPane.showMessageDialog(null, "收费失败!");}}
+					} catch (HeadlessException e1) {
+						e1.printStackTrace();
+					} catch (NumberFormatException e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+					
+			}}
+		});
+		btnNewButton_9.setFont(new Font("宋体", Font.PLAIN, 18));
+		btnNewButton_9.setBounds(641, 389, 93, 23);
+		jPanelCharge.add(btnNewButton_9);
 		
 		jTabbedPane.add("退出", jPanelExit);	
 		jPanelExit.setLayout(null);
