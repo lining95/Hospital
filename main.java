@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -42,7 +43,9 @@ public class main{
 	frame1.setVisible(true);	
 	
 	final JTextField  text1=new JTextField(10);
-	final JTextField  text2=new JTextField(10);
+	//final JTextField  text2=new JTextField(10);
+	  final JPasswordField jPasswordField1 = new JPasswordField();// 定义密文框  
+	  jPasswordField1.setEchoChar('*');// 设置回显字符为* 
 	JLabel la=new JLabel("ID:");
 	JLabel la2=new JLabel("密码:");
 	JButton jbn=new JButton("登录");
@@ -52,8 +55,10 @@ public class main{
     text1.setBounds(200,50,100,20);
     frame1.add(la2);
     la2.setBounds(170,90,50,20);
-    frame1.add(text2);
-    text2.setBounds(200,90,100,20);
+    //frame1.add(text2);
+   // text2.setBounds(200,90,100,20);
+    frame1.add(jPasswordField1);
+    jPasswordField1.setBounds(200,90,100,20);
     frame1.add(jbn);
     jbn.setBounds(200,140,100,30);
     
@@ -61,7 +66,6 @@ public class main{
         
 
     
-	
   //添加点击事件监听器（你可以使用任何其他监听，看你想在什么情况下创建新的窗口了）
     jbn.addActionListener(new ActionListener(){
     //单击按钮执行的方法
@@ -83,7 +87,8 @@ public class main{
 	       int i1 =0;
 	       i1 = Integer.parseInt(m1);
 	       String s= null;   
-	       s= text2.getText();  
+	       //s= text2.getText();  
+	      s=new String(jPasswordField1.getPassword());
    
 		     String sql="select * from Users where userID="+i1+"";
 			ResultSet rs=null;	
