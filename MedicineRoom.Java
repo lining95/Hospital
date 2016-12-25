@@ -200,7 +200,9 @@ public class Mdcn extends JFrame implements ActionListener {
 	    
 	    menu2.disable();
         menu3.disable();
-	        
+	    
+	       
+	    
 	    
 	}
 	
@@ -365,4 +367,3 @@ md.setVisible(true);
 		}
 	}
 }
-
