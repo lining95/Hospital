@@ -211,11 +211,11 @@ public class Reg {
 		frame.getContentPane().add(label_5);
 		
 		JLabel label_6 = new JLabel("\uFF08\u8BF7\u8F93\u516511\u4F4D\u624B\u673A\u53F7\uFF09");
-		label_6.setBounds(233, 230, 126, 15);
+		label_6.setBounds(233, 230, 138, 15);
 		frame.getContentPane().add(label_6);
 		
 		JLabel label_7 = new JLabel("\uFF08\u8BF7\u8F93\u5165\u5B8C\u6574\u79D1\u5BA4\u540D\u5B57\uFF09");
-		label_7.setBounds(233, 270, 138, 15);
+		label_7.setBounds(233, 270, 163, 15);
 		frame.getContentPane().add(label_7);
 		
 		JLabel label_8 = new JLabel("\uFF08\u4F8B\uFF1A2000/10/10 )");
