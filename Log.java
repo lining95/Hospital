@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.HeadlessException;
 
 import javax.swing.SwingConstants;
@@ -14,6 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
@@ -90,10 +92,8 @@ public class Log {
 		button.addActionListener(new ActionListener() {
 			//取消按钮
 			public void actionPerformed(ActionEvent e) {
-			 textField.setText(null);
-			 passwordField.setText(null);
-			
-			
+				textField.setText(null);
+				passwordField.setText(null);
 			}
 		});
 		button.setBounds(92, 173, 93, 23);
@@ -103,17 +103,27 @@ public class Log {
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//登陆按钮
-				int userid = Integer.parseInt(textField.getText());
+				int usersid = Integer.parseInt(textField.getText());
 				String pwd = passwordField.getText();
-				String sql1 = "select * from Users where userID= "+userid+" and roleID=6";
+				String sql1 = "select * from Users where usersID= "+usersid+" and roleID=6";
 			
-			
+			try{
 					Connection con  = sqlOperate.Connection();
-					ResultSet rs =sqlOperate.SqlSel(sql1);
-					try {
+					/*PreparedStatement state = con.prepareStatement(sql1);
+					state.setInt(1, usersid);
+					ResultSet rs = state.executeQuery();
+					**/
+					ResultSet rs = sqlOperate.SqlSel(sql1);
 						if(rs.next()){
-							if(pwd.equals(rs.getString(pwd))){
+							if(pwd.equals(rs.getString("pwd"))){
+								
+								
 							JOptionPane.showMessageDialog(null, "登录成功","提示对话框",JOptionPane.INFORMATION_MESSAGE);
+							
+							frame.dispose();
+						    new Reg();
+							
+							
 						}else{
 							JOptionPane.showMessageDialog(null, "密码错误！","提示对话框",JOptionPane.INFORMATION_MESSAGE);
 						}
