@@ -34,7 +34,7 @@ public class DocMain extends JFrame {
 	protected DefaultTableModel tmhavesold;
 	protected Object Database;
 	private JTable table_1;
-
+    public static String NN;
 	/**
 	 * Launch the application.
 	 */
@@ -82,7 +82,7 @@ public class DocMain extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+        
 		JButton btnNewButton_1 = new JButton("\u67E5\u770B\u75C5\u4EBA\u9884\u7EA6\u4FE1\u606F");
 		btnNewButton_1.setBounds(118, 27, 156, 23);
 		btnNewButton_1.addActionListener(new ActionListener() {
@@ -100,7 +100,10 @@ public class DocMain extends JFrame {
 
 					Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; DatabaseName=Hospital","sa","sa");
 					Statement st = conn.createStatement();
-					ResultSet rs = st.executeQuery("select * from Registration");
+					
+					int mm = Integer.parseInt(Doc.MM);
+					
+					ResultSet rs = st.executeQuery("select * from Registration where DoctorID='"+mm+"'");
 					while(rs.next()){
 					Vector<Object> vec = new Vector<Object>();//就是这个存单行的，最后放到上面的大的Vector里面
 					for(int i=1;i<=5;i++){
@@ -118,6 +121,8 @@ public class DocMain extends JFrame {
 
 		           
 			}
+
+		
 		});
 		contentPane.add(btnNewButton_1);
 		
@@ -146,6 +151,7 @@ public class DocMain extends JFrame {
 
 					Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; DatabaseName=Hospital","sa","sa");
 					Statement st = conn.createStatement();
+					NN=textField.getText();
 					ResultSet rs = st.executeQuery("select * from Patient where PatID='"+textField.getText()+"'");//zheli 
 					while(rs.next()){
 					Vector<Object> vec = new Vector<Object>();//就是这个存单行的，最后放到上面的大的Vector里面

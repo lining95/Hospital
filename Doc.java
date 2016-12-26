@@ -17,7 +17,7 @@ public class Doc<SQLExecption> extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
-
+    public static String MM;
 	private JPasswordField passwordField_1;
 
 	/**
@@ -52,12 +52,10 @@ public class Doc<SQLExecption> extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		textField = new JTextField();
-		
-		
-		
 		textField.setBounds(117, 35, 93, 21);
 		contentPane.add(textField);
 		textField.setColumns(10);
+		
 		
 		JLabel lblNewLabel_1 = new JLabel("   \u5BC6\u7801\uFF1A");
 		lblNewLabel_1.setBounds(53, 78, 65, 21);
@@ -93,6 +91,7 @@ public class Doc<SQLExecption> extends JFrame {
 					e1.printStackTrace();
 				}
 		           String text1=textField.getText(); 
+		           MM=textField.getText();
 		           int i1 =0;
 		   	       i1 =Integer.valueOf(text1);
 		           String sql="select * from Users where UserID="+i1+"";
@@ -147,3 +146,6 @@ public class Doc<SQLExecption> extends JFrame {
 		
 		}
 }
+
+
+

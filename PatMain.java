@@ -32,6 +32,7 @@ public class PatMain extends JFrame {
 	private JTextField textField_4;
 	private JTextField textField_5;
 	private JTextField textField_6;
+	//static int regid1;
 	/**
 	 * Launch the application.
 	 */
@@ -185,7 +186,13 @@ public class PatMain extends JFrame {
 					Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433; DatabaseName=Hospital","sa","sa");
 					Statement st = conn.createStatement();
 					
-					ResultSet rs = st.executeQuery("select * from charge ");//zheli 
+					//int nn=Integer.parseInt(DocMain.NN);
+					//int mm=Integer.parseInt(Doc.MM);
+					//ResultSet regid=st.executeQuery("select * from Registration where PatientID="+nn+" and DoctorID="+mm+"");
+					//regid1=regid.getInt("RegID");
+					
+					
+					ResultSet rs = st.executeQuery("select * from charge");
 					while(rs.next()){
 					Vector<Object> vec = new Vector<Object>();//就是这个存单行的，最后放到上面的大的Vector里面
 					for(int i=1;i<=3;i++){
@@ -293,6 +300,10 @@ public class PatMain extends JFrame {
 					e1.printStackTrace();
 				}
 	         	float sumprice=Float.parseFloat(textField_1.getText());
+	         	
+	         	
+				
+	         	
 	         	String sql="insert into Charge values("+textField_6.getText()+","+sumprice+", '"+lblNewLabel_2.getText()+"')";
 				try {
 					st.executeUpdate(sql);
