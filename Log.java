@@ -68,9 +68,9 @@ public class Log {
 		label.setBounds(41, 22, 187, 59);
 		frame.getContentPane().add(label);
 		
-		JLabel lblNewLabel = new JLabel("\u767B\u9646\u754C\u9762");
+		JLabel lblNewLabel = new JLabel("\u75C5\u4EBA\u767B\u9646\u754C\u9762");
 		lblNewLabel.setForeground(Color.CYAN);
-		lblNewLabel.setBounds(261, 54, 78, 15);
+		lblNewLabel.setBounds(261, 54, 93, 15);
 		frame.getContentPane().add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("\u8D26\u6237\uFF1A");
@@ -105,7 +105,7 @@ public class Log {
 				//µÇÂ½°´Å¥
 				int usersid = Integer.parseInt(textField.getText());
 				String pwd = passwordField.getText();
-				String sql1 = "select * from Users where usersID= "+usersid+" and roleID=6";
+				String sql1 = "select * from Users where userID= "+usersid+" and roleID=6";
 			
 			try{
 					Connection con  = sqlOperate.Connection();
